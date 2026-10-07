@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#153d35">
+    <title>KGSUMM | Research Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
+    <script src="{{ url_for('static', filename='icons.js') }}" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="KGSUMM home"><span class="brand-mark">KG</span>KGSUMM<span class="brand-divider"></span><span class="brand-caption">Research Portal</span></a>
+      <span class="workspace-label">RESEARCH WORKSPACE</span>
+    </header>
+    <main>
+      <section class="heading" aria-labelledby="page-title">
+        <div class="eyebrow">KGSUMM / WORKSPACE</div>
+        <h1 id="page-title">Research tools</h1>
+        <div class="workspace-meta"><span>03 services</span><span class="host-label">{{ hostname }}</span></div>
+      </section>
+      <div class="research-image" role="img" aria-label="Bookshelves in a research library"></div>
+      <section class="services" aria-label="Research services">
+        {% for service in services %}
+        <a class="service {{ service.color }}" href="{{ service.url }}" aria-label="Open {{ service.name }} on port {{ service.port }}">
+          <div class="service-top"><span class="service-icon"><i data-lucide="{{ service.icon }}" aria-hidden="true"></i></span><span class="service-number">0{{ loop.index }}</span></div>
+          <div class="category">{{ service.category }}</div>
+          <h2>{{ service.name }}</h2>
+          <div class="service-bottom"><span class="port">PORT {{ service.port }}</span><span class="open-label">Open <span aria-hidden="true">&#8599;</span></span></div>
+        </a>
+        {% endfor %}
+      </section>
+      <footer><span>KGSUMM</span><span>Knowledge Graph Summarization</span></footer>
+    </main>
+  </body>
+</html>

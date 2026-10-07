@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ service.name }} | KGSUMM</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body class="workspace-page">
+    <header class="workspace-bar">
+      <a href="{{ url_for('index') }}" class="workspace-back" aria-label="Back to research tools"><span aria-hidden="true">&#8592;</span> KGSUMM</a>
+      <h1>{{ service.name }}</h1>
+      <a href="{{ frame_url }}" target="_blank" rel="noopener" class="workspace-open">Open <span aria-hidden="true">&#8599;</span></a>
+    </header>
+    <iframe class="service-frame" src="{{ frame_url }}" title="{{ service.name }}" allow="fullscreen"></iframe>
+  </body>
+</html>
