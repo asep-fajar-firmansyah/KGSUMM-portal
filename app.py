@@ -22,7 +22,13 @@ def configured_port(name: str, default: int) -> int:
 
 def create_app() -> Flask:
     app = Flask(__name__)
-    app.wsgi_app = ProxyFix(app.wsgi_app, x_prefix=1)
+    app.wsgi_app = ProxyFix(
+    app.wsgi_app,
+    x_for=0,
+    x_proto=0,
+    x_host=0,
+    x_prefix=1,
+)
     app.config.from_mapping(
         TOT4ES_PORT=configured_port("TOT4ES_PORT", 5000),
         HUMAN_EVALUATION_PORT=configured_port("HUMAN_EVALUATION_PORT", 8011),
