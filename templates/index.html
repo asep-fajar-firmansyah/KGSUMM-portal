@@ -18,7 +18,7 @@
       <section class="heading" aria-labelledby="page-title">
         <div class="eyebrow">KGSUMM / WORKSPACE</div>
         <h1 id="page-title">Research tools</h1>
-        <div class="workspace-meta"><span>03 services</span><span class="host-label">{{ hostname }}</span></div>
+        <div class="workspace-meta"><span>{{ '%02d' | format(services | length) }} services</span><span class="host-label">{{ hostname }}</span></div>
       </section>
       <div class="research-image" role="img" aria-label="Bookshelves in a research library"></div>
       <section class="services" aria-label="Research services">

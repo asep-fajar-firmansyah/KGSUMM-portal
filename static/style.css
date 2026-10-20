@@ -17,7 +17,7 @@ h1 { font-family: 'Manrope', sans-serif; font-size: 36px; font-weight: 800; line
 .workspace-meta { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--muted); margin-bottom: 26px; }
 .host-label { overflow-wrap: anywhere; text-align: right; }
 .research-image { height: 150px; background: #d0dbd5 url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1800&q=85') center 46% / cover; border-radius: 6px; }
-.services { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; padding: 28px 0 46px; }
+.services { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; padding: 28px 0 46px; }
 .service { --accent: #28644d; --wash: #e7f1ea; background: white; border: 1px solid var(--line); border-top: 3px solid var(--accent); border-radius: 6px; padding: 28px 25px 23px; min-height: 253px; display: flex; flex-direction: column; transition: transform 180ms, box-shadow 180ms; animation: reveal 450ms both; }
 .service.blue { --accent: #356ca1; --wash: #eaf1f9; animation-delay: 60ms; }
 .service.rose { --accent: #a44f69; --wash: #f8edf0; animation-delay: 120ms; }

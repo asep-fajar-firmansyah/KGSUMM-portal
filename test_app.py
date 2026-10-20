@@ -14,16 +14,30 @@ class PortalTests(unittest.TestCase):
         response = self.client.get("/", base_url="http://localhost:8080")
         self.assertEqual(response.status_code, 200)
         page = response.get_data(as_text=True)
-        for name, slug in (("ToT4ES", "tot4es"), ("Human Evaluation", "evaluation"), ("Synthetic Dataset", "dataset")):
+        for name, slug in (("LLM-Walk", "llm-walk"), ("ToT4ES", "tot4es"), ("Human Evaluation", "evaluation"), ("Synthetic Dataset", "dataset")):
             self.assertIn(name, page)
             self.assertIn(f'href="/workspace/{slug}/"', page)
         self.assertNotIn('href="http://localhost:', page)
+        self.assertIn('PORT 8044', page)
+        self.assertIn('04 services', page)
 
     def test_remote_hostname_and_https(self) -> None:
         page = self.client.get("/", base_url="https://research.example:8080").get_data(as_text=True)
-        for slug in ("tot4es", "evaluation", "dataset"):
+        for slug in ("tot4es", "evaluation", "dataset", "llm-walk"):
             self.assertIn(f'href="/workspace/{slug}/"', page)
         self.assertNotIn('href="https://research.example:', page)
+
+    def test_forwarded_prefix_is_used_for_page_assets_and_links(self) -> None:
+        response = self.client.get("/", headers={"X-Forwarded-Prefix": "/portal"})
+        page = response.get_data(as_text=True)
+        self.assertIn('href="/portal/static/style.css"', page)
+        self.assertIn('href="/portal/workspace/llm-walk/"', page)
+
+        workspace = self.client.get(
+            "/workspace/llm-walk/", headers={"X-Forwarded-Prefix": "/portal"}
+        ).get_data(as_text=True)
+        self.assertIn('src="/portal/services/llm-walk/"', workspace)
+        self.assertIn('href="/portal/static/style.css"', workspace)
 
     def test_ipv6_links(self) -> None:
         page = self.client.get("/", base_url="http://[::1]:8080").get_data(as_text=True)
@@ -43,7 +57,7 @@ class PortalTests(unittest.TestCase):
                     create_app()
 
     def test_framed_services_use_same_origin(self) -> None:
-        for slug in ("tot4es", "evaluation", "dataset"):
+        for slug in ("tot4es", "evaluation", "dataset", "llm-walk"):
             response = self.client.get(f"/workspace/{slug}/")
             self.assertEqual(response.status_code, 200)
             self.assertIn(f'src="/services/{slug}/"', response.get_data(as_text=True))

@@ -2,9 +2,11 @@ import os
 from urllib.parse import urlsplit
 
 from flask import Flask, abort, render_template, request, url_for
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 
 SERVICES = [
+    {"slug": "llm-walk", "name": "LLM-Walk", "category": "GRAPH REASONING", "icon": "route", "key": "LLM_WALK_PORT", "color": "green"},
     {"slug": "tot4es", "name": "ToT4ES", "category": "SUMMARIZATION", "icon": "network", "key": "TOT4ES_PORT", "color": "green"},
     {"slug": "evaluation", "name": "Human Evaluation", "category": "ASSESSMENT", "icon": "users", "key": "HUMAN_EVALUATION_PORT", "color": "blue"},
     {"slug": "dataset", "name": "Synthetic Dataset", "category": "DATA", "icon": "database", "key": "SYNTHETIC_DATASET_PORT", "color": "rose"},
@@ -20,10 +22,12 @@ def configured_port(name: str, default: int) -> int:
 
 def create_app() -> Flask:
     app = Flask(__name__)
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_prefix=1)
     app.config.from_mapping(
         TOT4ES_PORT=configured_port("TOT4ES_PORT", 5000),
         HUMAN_EVALUATION_PORT=configured_port("HUMAN_EVALUATION_PORT", 8011),
         SYNTHETIC_DATASET_PORT=configured_port("SYNTHETIC_DATASET_PORT", 8022),
+        LLM_WALK_PORT=configured_port("LLM_WALK_PORT", 8044),
     )
 
     @app.get("/")
@@ -42,7 +46,8 @@ def create_app() -> Flask:
         service = next((item for item in SERVICES if item["slug"] == slug), None)
         if service is None:
             abort(404)
-        return render_template("workspace.html", service=service, frame_url=f"/services/{slug}/")
+        frame_url = url_for("proxy_not_configured", slug=slug)
+        return render_template("workspace.html", service=service, frame_url=frame_url)
 
     @app.get("/services/<slug>/", defaults={"path": ""})
     @app.get("/services/<slug>/<path:path>")
