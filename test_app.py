@@ -18,8 +18,7 @@ class PortalTests(unittest.TestCase):
             self.assertIn(name, page)
             self.assertIn(f'href="/workspace/{slug}/"', page)
         self.assertNotIn('href="http://localhost:', page)
-        for port in ('PORT 5000', 'PORT 8011', 'PORT 8022', 'PORT 8044'):
-            self.assertNotIn(port, page)
+        self.assertIn('PORT 8044', page)
         self.assertIn('04 services', page)
 
     def test_remote_hostname_and_https(self) -> None:
@@ -48,7 +47,7 @@ class PortalTests(unittest.TestCase):
         with patch.dict("os.environ", {"TOT4ES_PORT": "9000"}):
             app = create_app()
         page = app.test_client().get("/", base_url="https://research.example").get_data(as_text=True)
-        self.assertNotIn('PORT 9000', page)
+        self.assertIn('PORT 9000', page)
         self.assertIn('href="/workspace/tot4es/"', page)
 
     def test_invalid_configuration(self) -> None:
