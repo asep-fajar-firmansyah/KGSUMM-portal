@@ -14,6 +14,7 @@ class PortalTests(unittest.TestCase):
         response = self.client.get("/", base_url="http://localhost:8080")
         self.assertEqual(response.status_code, 200)
         page = response.get_data(as_text=True)
+        self.assertIn('class="brand" href="/"', page)
         for name, slug in (("LLM-Walk", "llm-walk"), ("ToT4ES", "tot4es"), ("Human Evaluation", "evaluation"), ("Synthetic Dataset", "dataset")):
             self.assertIn(name, page)
             self.assertIn(f'href="/workspace/{slug}/"', page)
@@ -31,6 +32,7 @@ class PortalTests(unittest.TestCase):
     def test_forwarded_prefix_is_used_for_page_assets_and_links(self) -> None:
         response = self.client.get("/", headers={"X-Forwarded-Prefix": "/portal"})
         page = response.get_data(as_text=True)
+        self.assertIn('class="brand" href="/portal/"', page)
         self.assertIn('href="/portal/static/style.css"', page)
         self.assertIn('href="/portal/workspace/llm-walk/"', page)
 
